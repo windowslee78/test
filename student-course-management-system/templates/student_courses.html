@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}课程选择 - 学生信息及选课管理系统{% endblock %}
+
+{% block content %}
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <a href="{{ url_for('student_dashboard') }}" class="text-gray-500 hover:text-primary mr-4 transition-colors">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+                <h1 class="text-xl font-bold text-primary">课程选择</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-600 hidden md:inline-block">欢迎，{{ session.username }}</span>
+                <a href="{{ url_for('logout') }}" class="text-gray-500 hover:text-danger transition-colors">
+                    <i class="fa fa-sign-out mr-1"></i> 退出
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 主内容区 -->
+<main class="container mx-auto px-4 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 未选课程 -->
+        <div class="bg-white rounded-xl shadow-card overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h2 class="text-lg font-semibold text-gray-800">未选课程</h2>
+            </div>
+            <div class="p-4">
+                <div class="relative">
+                    <input type="text" id="available-course-search" placeholder="搜索课程..." 
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none mb-4"
+                        oninput="filterCourses('available')">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+                
+                <div class="h-[500px] overflow-y-auto scrollbar-hide border border-gray-200 rounded-lg">
+                    <ul id="available-courses-list" class="divide-y divide-gray-100">
+                        {% if available_courses %}
+                            {% for course in available_courses %}
+                            <li class="px-4 py-3 hover:bg-gray-50 transition-colors flex justify-between items-center course-item" data-name="{{ course.coursename|lower }}">
+                                <div>
+                                    <div class="font-medium">{{ course.coursename }}</div>
+                                    <div class="text-sm text-gray-500">教师: {{ course.teacher }} | 学分: {{ course.score }}</div>
+                                </div>
+                                <a href="{{ url_for('select_course', course_id=course.id) }}" 
+                                   class="px-3 py-1 rounded text-sm bg-primary text-white hover:bg-primary/90 transition-colors">
+                                    <i class="fa fa-plus mr-1"></i> 选择
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="px-4 py-3 text-center text-gray-500">没有可用课程</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 已选课程 -->
+        <div class="bg-white rounded-xl shadow-card overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h2 class="text-lg font-semibold text-gray-800">已选课程</h2>
+            </div>
+            <div class="p-4">
+                <div class="relative">
+                    <input type="text" id="selected-course-search" placeholder="搜索已选课程..." 
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none mb-4"
+                        oninput="filterCourses('selected')">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+                
+                <div class="h-[500px] overflow-y-auto scrollbar-hide border border-gray-200 rounded-lg">
+                    <ul id="selected-courses-list" class="divide-y divide-gray-100">
+                        {% if selected_courses %}
+                            {% for course in selected_courses %}
+                            <li class="px-4 py-3 hover:bg-gray-50 transition-colors flex justify-between items-center course-item" data-name="{{ course.coursename|lower }}">
+                                <div>
+                                    <div class="font-medium">{{ course.coursename }}</div>
+                                    <div class="text-sm text-gray-500">教师: {{ course.teacher }} | 学分: {{ course.score }}</div>
+                                </div>
+                                <!-- 修复了这里的路由引用 -->
+                                <a href="{{ url_for('deselect_course', course_id=course.id) }}" 
+                                   class="px-3 py-1 rounded text-sm bg-danger text-white hover:bg-danger/90 transition-colors">
+                                    <i class="fa fa-minus mr-1"></i> 退选
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="px-4 py-3 text-center text-gray-500">没有已选课程</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // 课程搜索过滤功能
+    function filterCourses(listType) {
+        const searchInput = document.getElementById(`${listType}-course-search`);
+        const filter = searchInput.value.toLowerCase();
+        const items = document.querySelectorAll(`#${listType}-courses-list .course-item`);
+        
+        items.forEach(item => {
+            const courseName = item.getAttribute('data-name');
+            if (courseName.includes(filter)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}

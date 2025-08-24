@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}学生信息及选课管理系统{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        accent: '#722ED1',
+                        neutral: '#1F2937',
+                        success: '#52C41A',
+                        warning: '#FAAD14',
+                        danger: '#FF4D4F',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .card-shadow-hover {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
+    <div class="flex-1">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- 消息提示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+                {% for category, message in messages %}
+                    <div class="bg-white rounded-lg shadow-lg p-4 flex items-center max-w-sm transform transition-all duration-300 animate-fade-in">
+                        {% if category == 'success' %}
+                            <i class="fa fa-check-circle text-success text-xl mr-3"></i>
+                        {% elif category == 'error' %}
+                            <i class="fa fa-times-circle text-danger text-xl mr-3"></i>
+                        {% elif category == 'warning' %}
+                            <i class="fa fa-exclamation-triangle text-warning text-xl mr-3"></i>
+                        {% else %}
+                            <i class="fa fa-info-circle text-primary text-xl mr-3"></i>
+                        {% endif %}
+                        <span>{{ message }}</span>
+                        <button onclick="this.parentElement.remove()" class="ml-auto text-gray-400 hover:text-gray-600">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <script>
+        // 自动隐藏提示消息
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const flashMessages = document.querySelectorAll('.animate-fade-in');
+                flashMessages.forEach(msg => {
+                    msg.style.opacity = '0';
+                    setTimeout(() => msg.remove(), 300);
+                });
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

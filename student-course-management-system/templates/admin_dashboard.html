@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}管理员控制台 - 学生信息及选课管理系统{% endblock %}
+
+{% block content %}
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <h1 class="text-xl font-bold text-primary">学生信息及选课管理系统</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-600 hidden md:inline-block">欢迎，{{ session.username }}</span>
+                <a href="{{ url_for('logout') }}" class="text-gray-500 hover:text-danger transition-colors">
+                    <i class="fa fa-sign-out mr-1"></i> 退出
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 主内容区 -->
+<main class="container mx-auto px-4 py-8">
+    <div class="text-center mb-10">
+        <h2 class="text-[clamp(1.25rem,2vw,1.75rem)] font-bold text-neutral mb-2">管理员控制台</h2>
+        <p class="text-gray-500">请选择您要进行的操作</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <!-- 学生管理卡片 -->
+        <div class="bg-white rounded-xl shadow-card p-6 transform transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 cursor-pointer">
+            <a href="{{ url_for('manage_students') }}" class="block h-full">
+                <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fa fa-users text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">学生管理</h3>
+                <p class="text-gray-500 text-sm">添加、编辑、删除和查询学生信息</p>
+                <div class="mt-4 text-primary font-medium text-sm inline-flex items-center">
+                    管理学生 <i class="fa fa-arrow-right ml-1"></i>
+                </div>
+            </a>
+        </div>
+        
+        <!-- 课程管理卡片 -->
+        <div class="bg-white rounded-xl shadow-card p-6 transform transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 cursor-pointer">
+            <a href="{{ url_for('manage_courses') }}" class="block h-full">
+                <div class="w-14 h-14 bg-secondary/10 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fa fa-book text-2xl text-secondary"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">课程管理</h3>
+                <p class="text-gray-500 text-sm">添加、编辑、删除和查询课程信息</p>
+                <div class="mt-4 text-secondary font-medium text-sm inline-flex items-center">
+                    管理课程 <i class="fa fa-arrow-right ml-1"></i>
+                </div>
+            </a>
+        </div>
+        
+        <!-- 选课信息卡片 -->
+        <div class="bg-white rounded-xl shadow-card p-6 transform transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 cursor-pointer">
+            <a href="{{ url_for('view_selections') }}" class="block h-full">
+                <div class="w-14 h-14 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fa fa-list-alt text-2xl text-accent"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">选课信息</h3>
+                <p class="text-gray-500 text-sm">查看和管理学生选课情况</p>
+                <div class="mt-4 text-accent font-medium text-sm inline-flex items-center">
+                    查看选课 <i class="fa fa-arrow-right ml-1"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}
