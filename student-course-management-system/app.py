@@ -11,8 +11,8 @@ app.secret_key = os.urandom(24)  # 用于会话管理的密钥
 # 数据库配置 - 请根据你的实际配置修改
 db_config = {
     'host': 'localhost',
-    'user': 'root',
-    'password': '1234567890',
+    'user': '你的账号',
+    'password': '你的密码',
     'database': 'students',
     'port': 3306,
     'charset': 'utf8mb4',
